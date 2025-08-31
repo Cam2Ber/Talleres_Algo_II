@@ -40,9 +40,9 @@ public class Recordatorio {
             return false;
         }
         Recordatorio otroRecordatorio = (Recordatorio) otro;
-        boolean mismo_mensaje = (this.mensaje == otroRecordatorio.mensaje());
-        boolean mismo_dia = (this.fecha == otroRecordatorio.fecha());
-        boolean misma_hora = (this.horario == otroRecordatorio.horario());
+        boolean mismo_mensaje = (this.mensaje().equals(otroRecordatorio.mensaje()));
+        boolean mismo_dia = (this.fecha().equals(otroRecordatorio.fecha()));
+        boolean misma_hora = (this.horario().equals(otroRecordatorio.horario()));
         if  (mismo_mensaje && mismo_dia && misma_hora) {
             return true;
         } 
