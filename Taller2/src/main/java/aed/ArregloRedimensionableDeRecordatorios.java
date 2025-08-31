@@ -17,7 +17,7 @@ class ArregloRedimensionableDeRecordatorios {
         for (int indice = 0; indice<this.tamanio_actual; indice++) {
             nuevo_arreglo[indice] = this.arreglo_recordatorio[indice];
         }
-        nuevo_arreglo[tamanio_actual+1] = i;
+        nuevo_arreglo[tamanio_actual] = i;
         this.tamanio_actual++;
         this.arreglo_recordatorio = nuevo_arreglo;
     }
@@ -26,8 +26,7 @@ class ArregloRedimensionableDeRecordatorios {
         if (i>=tamanio_actual) {
             return null;
         }
-        Recordatorio rec_obtenido = new Recordatorio(this.arreglo_recordatorio[i].mensaje(),this.arreglo_recordatorio[i].fecha(),this.arreglo_recordatorio[i].horario());
-        return rec_obtenido;
+        return this.arreglo_recordatorio[i];
     }
 
     public void quitarAtras() {
