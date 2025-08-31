@@ -48,11 +48,18 @@ class ArregloRedimensionableDeRecordatorios {
     }
 
     public ArregloRedimensionableDeRecordatorios(ArregloRedimensionableDeRecordatorios vector) {
-        this.arreglo_Recordatorios = vector.arreglo_Recordatorios;
         this.longitud = vector.longitud;
+        this.arreglo_Recordatorios = new Recordatorio[vector.longitud];
+        for (int indice = 0; indice<vector.longitud; indice++) {
+            String mensaje_copia = new String(vector.arreglo_Recordatorios[indice].mensaje());
+            Fecha fecha_copia = new Fecha(vector.arreglo_Recordatorios[indice].fecha());
+            Horario horario_copia = new Horario(vector.arreglo_Recordatorios[indice].horario().hora(),vector.arreglo_Recordatorios[indice].horario().minutos());
+            this.arreglo_Recordatorios[indice] = new Recordatorio(mensaje_copia,fecha_copia,horario_copia);
+        }
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
-        return null;
+        ArregloRedimensionableDeRecordatorios copia = new ArregloRedimensionableDeRecordatorios(this);
+        return copia;
     }
 }
