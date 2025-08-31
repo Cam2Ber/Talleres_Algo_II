@@ -5,7 +5,8 @@ class ArregloRedimensionableDeRecordatorios {
     private Recordatorio[] arreglo_recordatorio;
 
     public ArregloRedimensionableDeRecordatorios() {
-        // Implementar
+        this.tamanio_actual = 0;
+        this.arreglo_recordatorio = new Recordatorio[0];
     }
 
     public int longitud() {
@@ -26,7 +27,8 @@ class ArregloRedimensionableDeRecordatorios {
         if (i>=tamanio_actual) {
             return null;
         }
-        return this.arreglo_recordatorio[i];
+        Recordatorio recordatorio_obtenido = new Recordatorio(this.arreglo_recordatorio[i].mensaje(), this.arreglo_recordatorio[i].fecha(), this.arreglo_recordatorio[i].horario());
+        return recordatorio_obtenido;
     }
 
     public void quitarAtras() {
@@ -39,11 +41,18 @@ class ArregloRedimensionableDeRecordatorios {
     }
 
     public void modificarPosicion(int indice, Recordatorio valor) {
-        // Implementar
+        if (indice<this.tamanio_actual) {
+            return;
+        }
+        this.arreglo_recordatorio[indice] = valor;
     }
 
     public ArregloRedimensionableDeRecordatorios(ArregloRedimensionableDeRecordatorios vector) {
-        // Implementar
+        this.tamanio_actual = vector.tamanio_actual;
+        this.arreglo_recordatorio = new Recordatorio[vector.tamanio_actual];
+        for (int indice = 0; indice<vector.tamanio_actual; indice++) {
+            this.arreglo_recordatorio[indice] = new Recordatorio(vector.arreglo_recordatorio[indice].mensaje(), new Fecha(vector.arreglo_recordatorio[indice].fecha().dia(), vector.arreglo_recordatorio[indice].fecha().mes()), new Horario(vector.arreglo_recordatorio[indice].horario().hora(), vector.arreglo_recordatorio[indice].horario().minutos()));
+        }
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
