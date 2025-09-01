@@ -57,9 +57,12 @@ class ArregloRedimensionableDeRecordatorios {
             this.arreglo_Recordatorios[indice] = new Recordatorio(mensaje_copia,fecha_copia,horario_copia);
         }
     }
+    //En total, se realizan una (1) reserva para el arreglo de recordatorios del mismo tamaño que vector, y luego, por cada elemento en vector (lo cual es equivalente a su longitud, de ahora en adelante referido como L) se realizan cuatro (4) reservas:
+    //Una para el mensaje, una para la fecha, otra para el horario, y una última para el Recordatorio en sí. En total se hacen 4*L+1, lo cual representa un crecimiento lineal del uso de la memoria según el tamaño del vector.
 
     public ArregloRedimensionableDeRecordatorios copiar() {
         ArregloRedimensionableDeRecordatorios copia = new ArregloRedimensionableDeRecordatorios(this);
         return copia;
     }
+    //Continuando con lo escrito sobre el constructor por copia, este método solamente agrega una (1) nueva reserva, para crear la variable copia. El total es 4*L+2, haciendo de la relación entre el uso de memoria y el tamaño del vector una relación linear.
 }
