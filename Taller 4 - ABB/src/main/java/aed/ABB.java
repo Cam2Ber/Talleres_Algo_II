@@ -112,8 +112,10 @@ public class ABB<T extends Comparable<T>> {
             }
         }
         else {
-            if (elem.Padre != null) {
-                
+            if ((res.Padre != null) && (res.Padre.datos.compareTo(elem.datos) > 0)) {
+                while ((res.Padre != null) && (res.Padre.datos.compareTo(elem.datos) > 0)) {
+                    res = res.Padre;
+                }
             }
         }
     }
