@@ -97,10 +97,7 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public void eliminar(T elem){
-        Nodo nodoAEliminar = this.pertenece_Nodo(elem);
-        if (nodoAEliminar != null) {
-            
-        }
+        throw new UnsupportedOperationException("No implementada aun");
     }
 
     public String toString(){
