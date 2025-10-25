@@ -103,6 +103,21 @@ public class ABB<T extends Comparable<T>> {
         return res;
     }
 
+    private Nodo sucesor(Nodo elem){ //Menor de los Mayores
+        Nodo res = elem;
+        if (elem.derecha != null) {
+            res = elem.derecha;
+            while (res.izquierda != null) {
+                res = res.izquierda;
+            }
+        }
+        else {
+            if (elem.Padre != null) {
+                
+            }
+        }
+    }
+
     public boolean pertenece(T elem){
         boolean res = false;
         Nodo nodoActual = this.pertenece_Nodo(elem);
