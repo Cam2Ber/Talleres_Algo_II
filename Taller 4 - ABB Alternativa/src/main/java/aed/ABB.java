@@ -32,11 +32,25 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public T minimo(){
-        throw new UnsupportedOperationException("No implementada aun");
+        T valorMinimo;
+        if (this.izquierda == null){
+            valorMinimo = this.root.datos;
+        }
+        else{
+            valorMinimo = this.izquierda.minimo();
+        }
+        return valorMinimo;
     }
 
     public T maximo(){
-        throw new UnsupportedOperationException("No implementada aun");
+        T valorMaximo;
+        if (this.derecha == null){
+            valorMaximo = this.root.datos;
+        }
+        else{
+            valorMaximo = this.derecha.maximo();
+        }
+        return valorMaximo;
     }
 
     public void insertar(T elem){
@@ -101,8 +115,69 @@ public class ABB<T extends Comparable<T>> {
         return res;
     }
 
+    private boolean esIzquierdo(T elem){
+    return (this.root.datos.compareTo(elem) > 0);
+    }
+
+
+    private int cantidad_de_hijos(){
+        int res = 0;
+        if (this.izquierda != null){
+            res = res+1;
+        }
+        if (this.derecha != null){
+            res = res+1;
+        }
+        return res;
+    }
+
+    private ABB<T> reducirAlturaYDevolverArbolConElemento(T elem){
+        ABB<T> ArbolAEliminar = this;
+        while (ArbolAEliminar.root.datos != elem){
+            ArbolAEliminar.altura = ArbolAEliminar.altura-1;
+            if (ArbolAEliminar.esIzquierdo(elem)){
+                ArbolAEliminar = ArbolAEliminar.izquierda;
+            }
+            else{
+                ArbolAEliminar = ArbolAEliminar.derecha;
+            }
+        }
+        return ArbolAEliminar;
+    }
+
+    private void eliminarRoot(){
+        int caso = this.cantidad_de_hijos();
+        if (caso == 0) {
+            this.root = null;
+        }
+        if (caso == 1) {
+            if (this.izquierda != null) {
+                this.root = this.izquierda.root;
+                if (this.izquierda.izquierda != null){
+                    this.izquierda = this.izquierda.izquierda;
+                }
+                if (this.izquierda.derecha != null){
+                    this.derecha = this.izquierda.derecha;
+                }
+            }
+            else{
+                this.root = this.derecha.root;
+                if (this.derecha.izquierda != null){
+                    this.izquierda = this.derecha.izquierda;
+                }
+                if (this.derecha.derecha != null){
+                    this.derecha = this.derecha.derecha;
+                }
+            }
+        }
+    }
+
+
     public void eliminar(T elem){
-        throw new UnsupportedOperationException("No implementada aun");
+        if (this.pertenece(elem)){
+            ABB<T> ArbolAEliminar = this.reducirAlturaYDevolverArbolConElemento(elem);
+            ArbolAEliminar.eliminarRoot();
+        }
     }
 
     public String toString(){
