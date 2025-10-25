@@ -165,6 +165,7 @@ public class ABB<T extends Comparable<T>> {
             if (this.izquierda != null) {
                 this.root = this.izquierda.root;
                 this.altura = this.izquierda.altura;
+<<<<<<< HEAD
                 if (this.izquierda.derecha != null){
                     this.derecha = this.izquierda.derecha;
                     this.derecha.padre = this;
@@ -172,6 +173,15 @@ public class ABB<T extends Comparable<T>> {
                 if (this.izquierda.izquierda != null){
                     this.izquierda = this.izquierda.izquierda;
                     this.izquierda.padre = this;
+=======
+                if (this.izquierda.izquierda != null){
+                    this.izquierda = this.izquierda.izquierda;
+                    this.izquierda.padre = this;
+                }
+                if (this.izquierda.derecha != null){
+                    this.derecha = this.izquierda.derecha;
+                    this.derecha.padre = this;
+>>>>>>> 4a4dd3750f968fc62a58dd366ec5e2a177a81750
                 }
             }
             else{
