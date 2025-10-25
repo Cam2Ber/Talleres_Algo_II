@@ -71,6 +71,7 @@ public class ABB<T extends Comparable<T>> {
         if (!this.pertenece(elem)){
             ABB<T> ArbolAInsertar = new ABB<T>();
             ArbolAInsertar.root = new Nodo(elem);
+            ArbolAInsertar.altura = 1;
             ABB<T> Arbol = this;
             while (Arbol.root.datos != elem) {
                 Arbol.altura = Arbol.altura+1;
@@ -148,27 +149,48 @@ public class ABB<T extends Comparable<T>> {
     private void eliminarRoot(){
         int caso = this.cantidad_de_hijos();
         if (caso == 0) {
-            this.root = null;
+            if (this.padre == null) {
+                this.root = null;
+            }
+            else{
+                if (this.padre.esIzquierdo(this.root.datos)){
+                    this.padre.izquierda = null;
+                }
+                else{
+                    this.padre.derecha = null;
+                }
+            }
         }
         if (caso == 1) {
             if (this.izquierda != null) {
                 this.root = this.izquierda.root;
+                this.altura = this.izquierda.altura;
                 if (this.izquierda.izquierda != null){
                     this.izquierda = this.izquierda.izquierda;
+                    this.izquierda.padre = this;
                 }
                 if (this.izquierda.derecha != null){
                     this.derecha = this.izquierda.derecha;
+                    this.derecha.padre = this;
                 }
             }
             else{
                 this.root = this.derecha.root;
+                this.altura = this.derecha.altura;
                 if (this.derecha.izquierda != null){
                     this.izquierda = this.derecha.izquierda;
+                    this.izquierda.padre = this;
                 }
                 if (this.derecha.derecha != null){
                     this.derecha = this.derecha.derecha;
+                    this.derecha.padre = this;
                 }
             }
+        }
+        if (caso == 2) {
+            T sucesor = this.derecha.minimo();
+            this.eliminar(sucesor);
+            this.root.datos = sucesor;
         }
     }
 
