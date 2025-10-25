@@ -87,6 +87,22 @@ public class ABB<T extends Comparable<T>> {
         return nodoActual;
     }
 
+    private boolean esHijoIzquierdo(Nodo elem){
+        boolean res = false;
+        if ((elem != null) && (elem.Padre != null)) {
+            res = elem.Padre.datos.compareTo(elem.datos) > 0;
+        }
+        return res;
+    }
+
+    private boolean esHijoDerecho(Nodo elem){
+        boolean res = false;
+        if ((elem != null) && (elem.Padre != null)) {
+            res = elem.Padre.datos.compareTo(elem.datos) < 0;
+        }
+        return res;
+    }
+
     public boolean pertenece(T elem){
         boolean res = false;
         Nodo nodoActual = this.pertenece_Nodo(elem);
