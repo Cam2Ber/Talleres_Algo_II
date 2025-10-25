@@ -59,32 +59,28 @@ public class ABB<T extends Comparable<T>> {
             ArbolAInsertar.root = new Nodo(elem);
             ABB<T> Arbol = this;
             while (Arbol.root.datos != elem) {
-                Arbol = comparar_e_insertar(elem, Arbol);
+                Arbol.altura = Arbol.altura+1;
+                if (Arbol.root.datos.compareTo(elem) > 0) {
+                    if (Arbol.izquierda == null) {
+                    Arbol.izquierda = ArbolAInsertar;
+                    ArbolAInsertar.padre = Arbol;
+                    }
+                    Arbol = Arbol.izquierda;
+                }
+                else {
+                    if (Arbol.derecha == null) {
+                        Arbol.derecha = ArbolAInsertar;
+                        ArbolAInsertar.padre = Arbol;
+                    }
+                    Arbol = Arbol.derecha;
+                }
             }
-        }
-    }
-
-    private ABB<T> comparar_e_insertar(T elem, ABB<T> Arbol){
-        Arbol.altura = Arbol.altura+1;
-        if (Arbol.root.datos.compareTo(elem) > 0) {
-            if (Arbol.izquierda == null) {
-                Arbol.izquierda = ArbolAInsertar;
-                ArbolAInsertar.padre = Arbol;
-            }
-            Arbol = Arbol.izquierda;
-        }
-        else {
-            if (Arbol.derecha == null) {
-                Arbol.derecha = ArbolAInsertar;
-                ArbolAInsertar.padre = Arbol;
-            }
-            Arbol = Arbol.derecha;
         }
     }
 
     private ABB<T> perteneceArbol(T elem){
         ABB<T> arbol = this;
-        while ((arbol.root != null) && (arbol.root.datos != elem)) {
+        while ((arbol != null) && (arbol.root != null) && (arbol.root.datos != elem)) {
             Nodo nodoActual = arbol.root;
             if (nodoActual.datos.compareTo(elem) > 0) {
                 arbol = arbol.izquierda;
@@ -99,7 +95,7 @@ public class ABB<T extends Comparable<T>> {
     public boolean pertenece(T elem){
         boolean res = false;
         ABB<T> arbol = this.perteneceArbol(elem);
-        if (arbol.root != null) {
+        if ((arbol != null) && (arbol.root != null)) {
             res = true;
         }
         return res;
