@@ -19,6 +19,25 @@ public class ABB<T extends Comparable<T>> {
         private Nodo(T valor) {
             this.datos = valor;
         }
+
+        private int Cantidad_de_hijos(){
+            int res = 0;
+            if (this.izquierda != null){
+                res = res+1;
+            }
+            if (this.derecha != null){
+                res = res+1;
+            }
+            return res;
+        }
+
+        private T minimoNodo(){
+            Nodo buscador = this;
+            while (buscador.izquierda != null){
+                buscador = buscador.izquierda;
+            }
+            return buscador.datos;
+        }
     }
 
     public ABB() {
@@ -87,39 +106,6 @@ public class ABB<T extends Comparable<T>> {
         return nodoActual;
     }
 
-    private boolean esHijoIzquierdo(Nodo elem){
-        boolean res = false;
-        if ((elem != null) && (elem.Padre != null)) {
-            res = elem.Padre.datos.compareTo(elem.datos) > 0;
-        }
-        return res;
-    }
-
-    private boolean esHijoDerecho(Nodo elem){
-        boolean res = false;
-        if ((elem != null) && (elem.Padre != null)) {
-            res = elem.Padre.datos.compareTo(elem.datos) < 0;
-        }
-        return res;
-    }
-
-    private Nodo sucesor(Nodo elem){ //Menor de los Mayores
-        Nodo res = elem;
-        if (elem.derecha != null) {
-            res = elem.derecha;
-            while (res.izquierda != null) {
-                res = res.izquierda;
-            }
-        }
-        else {
-            if ((res.Padre != null) && (res.Padre.datos.compareTo(elem.datos) > 0)) {
-                while ((res.Padre != null) && (res.Padre.datos.compareTo(elem.datos) > 0)) {
-                    res = res.Padre;
-                }
-            }
-        }
-    }
-
     public boolean pertenece(T elem){
         boolean res = false;
         Nodo nodoActual = this.pertenece_Nodo(elem);
@@ -130,7 +116,67 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public void eliminar(T elem){
-        throw new UnsupportedOperationException("No implementada aun");
+        Nodo nodoABorrar = this.pertenece_Nodo(elem);
+        if (nodoABorrar == null){
+            return;
+        }
+        int Caso = nodoABorrar.Cantidad_de_hijos();
+        boolean fatherless = (this.root.datos == nodoABorrar.datos);
+        boolean hijoIzquierdo = false;
+        if (!fatherless){
+            hijoIzquierdo = (nodoABorrar.Padre.datos.compareTo(nodoABorrar.datos) > 0);
+        }
+        if (Caso == 0){
+            this.tamano = this.tamano-1;
+            if (!fatherless){
+                if (hijoIzquierdo){
+                    nodoABorrar.Padre.izquierda = null;
+                }
+                else{
+                    nodoABorrar.Padre.derecha = null;
+                }
+            }
+            nodoABorrar.datos = null;
+        }
+        if (Caso == 1){
+            this.tamano = this.tamano-1;
+            if (nodoABorrar.izquierda != null){
+                if (!fatherless){
+                    nodoABorrar.izquierda.Padre = nodoABorrar.Padre;
+                    if (hijoIzquierdo){
+                        nodoABorrar.Padre.izquierda = nodoABorrar.izquierda;
+                    }
+                    else{
+                        nodoABorrar.Padre.derecha = nodoABorrar.izquierda;
+                    }
+                }
+                else{
+                    nodoABorrar.izquierda.Padre = null;
+                    this.root = nodoABorrar.izquierda;
+                }
+            }
+            else{
+                if (!fatherless){
+                    nodoABorrar.derecha.Padre = nodoABorrar.Padre;
+                    if (hijoIzquierdo){
+                        nodoABorrar.Padre.izquierda = nodoABorrar.derecha;
+                    }
+                    else{
+                        nodoABorrar.Padre.derecha = nodoABorrar.derecha;
+                    }
+                }
+                else{
+                    nodoABorrar.derecha.Padre = null;
+                    this.root = nodoABorrar.derecha;
+                }
+            }
+        }
+        if (Caso == 2){
+            T sucesor = nodoABorrar.derecha.minimoNodo();
+            this.eliminar(sucesor);
+            nodoABorrar.datos = sucesor;
+        }
+        
     }
 
     public String toString(){
