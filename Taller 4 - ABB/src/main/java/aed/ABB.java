@@ -85,7 +85,7 @@ public class ABB<T extends Comparable<T>> {
 
     private void BuscarMeter(T elem){
         Nodo nodoActual = this.root;
-        while (nodoActual.datos != elem) {
+        while (nodoActual.datos.compareTo(elem) != 0) {
                 if (nodoActual.EsMenor(elem)) {
                     if (nodoActual.izquierda == null) {
                         nodoActual.izquierda = new Nodo(elem);
@@ -107,7 +107,7 @@ public class ABB<T extends Comparable<T>> {
 
     private Nodo pertenece_Nodo(T elem){
         Nodo nodoActual = this.root;
-        while ((nodoActual != null) && (nodoActual.datos != elem)) {
+        while ((nodoActual != null) && (nodoActual.datos.compareTo(elem) != 0)) {
             if (nodoActual.EsMenor(elem)) {
                 nodoActual = nodoActual.izquierda;
             }
@@ -132,10 +132,10 @@ public class ABB<T extends Comparable<T>> {
         if (nodoABorrar == null){
             return;
         }
+        this.tamano = this.tamano-1;
         int Caso = nodoABorrar.Cantidad_de_hijos();
         if (Caso == 0){
-            this.tamano = this.tamano-1;
-            if (this.root.datos != nodoABorrar.datos){
+            if (this.root != nodoABorrar){
                 if (nodoABorrar.Padre.EsMenor(nodoABorrar.datos)){
                     nodoABorrar.Padre.izquierda = null;
                 }
@@ -148,13 +148,20 @@ public class ABB<T extends Comparable<T>> {
             }
         }
         if (Caso == 1){
-            this.tamano = this.tamano-1;
             Caso1(nodoABorrar);
         }
         if (Caso == 2){
-            T sucesor = nodoABorrar.derecha.minimoNodo();
-            this.eliminar(sucesor);
-            nodoABorrar.datos = sucesor;
+            Nodo sucesor = nodoABorrar.derecha.NodoConMenorValor();
+            nodoABorrar.datos = sucesor.datos;
+            if (sucesor.derecha != null){
+                sucesor.derecha.Padre = sucesor.Padre;
+            }
+            if (sucesor == nodoABorrar.derecha){
+                sucesor.Padre.derecha = sucesor.derecha;
+            }
+            else{
+                sucesor.Padre.izquierda = sucesor.derecha;
+            }
         }
         
     }
@@ -177,14 +184,28 @@ public class ABB<T extends Comparable<T>> {
         }
 
     public String toString(){
-        throw new UnsupportedOperationException("No implementada aun");
+        String texto = "{";
+        ABB_Iterador iterador = this.iterador();
+        if (iterador.haySiguiente()){
+            texto = texto+iterador.siguiente();
+        }
+        while (iterador.haySiguiente()){
+            texto = texto+","+iterador.siguiente();
+        }
+        texto = texto+"}";
+        return texto;
     }
 
     public class ABB_Iterador {
         private Nodo _actual;
 
         private ABB_Iterador(){
-            _actual = root.NodoConMenorValor();
+            if (root == null){
+                _actual = null;
+            }
+            else{
+                _actual = root.NodoConMenorValor();
+            }
         }
 
         public boolean haySiguiente() {
