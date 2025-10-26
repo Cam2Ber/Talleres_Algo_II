@@ -105,23 +105,23 @@ public class ABB<T extends Comparable<T>> {
             }
     }
 
-    private Nodo pertenece_Nodo(T elem){
+    private Nodo pertenece_Nodo(T elem){ //
         Nodo nodoActual = this.root;
-        while ((nodoActual != null) && (nodoActual.datos.compareTo(elem) != 0)) {
-            if (nodoActual.EsMenor(elem)) {
-                nodoActual = nodoActual.izquierda;
+            while ((nodoActual != null) && (nodoActual.datos != null) && (nodoActual.datos.compareTo(elem) != 0)) {
+                if (nodoActual.EsMenor(elem)) {
+                    nodoActual = nodoActual.izquierda;
+                }
+                else {
+                    nodoActual = nodoActual.derecha;
+                }
             }
-            else {
-                nodoActual = nodoActual.derecha;
-            }
-        }
         return nodoActual;
     }
 
     public boolean pertenece(T elem){
         boolean res = false;
         Nodo nodoActual = this.pertenece_Nodo(elem);
-        if (nodoActual != null) {
+        if ((nodoActual != null) && (nodoActual.datos != null)) {
             res = true;
         }
         return res;
@@ -129,7 +129,7 @@ public class ABB<T extends Comparable<T>> {
 
     public void eliminar(T elem){
         Nodo nodoABorrar = this.pertenece_Nodo(elem);
-        if (nodoABorrar == null){
+        if ((nodoABorrar == null) || (nodoABorrar.datos == null)){
             return;
         }
         this.tamano = this.tamano-1;
@@ -171,15 +171,23 @@ public class ABB<T extends Comparable<T>> {
                 nodoABorrar.datos = nodoABorrar.izquierda.datos;
                 if (nodoABorrar.izquierda.derecha != null){
                     nodoABorrar.derecha = nodoABorrar.izquierda.derecha;
+                    nodoABorrar.derecha.Padre = nodoABorrar;
                 }
                 nodoABorrar.izquierda = nodoABorrar.izquierda.izquierda;
+                if (nodoABorrar.izquierda != null){
+                    nodoABorrar.izquierda.Padre = nodoABorrar;
+                }
             }
             else{
                 nodoABorrar.datos = nodoABorrar.derecha.datos;
                 if (nodoABorrar.derecha.izquierda != null){
                     nodoABorrar.izquierda = nodoABorrar.derecha.izquierda;
+                    nodoABorrar.izquierda.Padre = nodoABorrar;
                 }
                 nodoABorrar.derecha = nodoABorrar.derecha.derecha;
+                if (nodoABorrar.derecha != null){
+                    nodoABorrar.derecha.Padre = nodoABorrar;
+                }
             }
         }
 
