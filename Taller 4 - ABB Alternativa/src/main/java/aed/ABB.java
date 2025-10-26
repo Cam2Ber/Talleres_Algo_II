@@ -31,14 +31,19 @@ public class ABB<T extends Comparable<T>> {
         return this.altura;
     }
 
-    public T minimo(){
-        T valorMinimo;
+    private ABB<T> minimoNodo(){
+        ABB<T> minimo;
         if (this.izquierda == null){
-            valorMinimo = this.root.datos;
+            minimo = this;
         }
         else{
-            valorMinimo = this.izquierda.minimo();
+            minimo = this.izquierda.minimoNodo();
         }
+        return minimo;
+    }
+
+    public T minimo(){
+        T valorMinimo = this.minimoNodo().root.datos;
         return valorMinimo;
     }
 
@@ -207,19 +212,41 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public class ABB_Iterador {
-        private Nodo _actual;
+        private ABB<T> _actual;
 
-        public boolean haySiguiente() {            
-            throw new UnsupportedOperationException("No implementada aun");
+        private ABB_Iterador() {
+            this._actual = null;
+        }
+
+        public boolean haySiguiente() {
+            return (this._actual == null);
         }
     
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            T res = _actual.root.datos;
+            if (this._actual.derecha != null){
+                this._actual = this._actual.derecha.minimoNodo();
+            }
+            else{
+                ABB<T> Buscador = this._actual;
+                boolean encontrado = false;
+                while ((Buscador.padre != null) && (!encontrado)){
+                    if (Buscador.padre.esIzquierdo(Buscador.root.datos)){
+                        encontrado = true;
+                    }
+                    else{
+                        Buscador = Buscador.padre;
+                    }
+                }
+
+            }
+            return res;
         }
     }
 
     public ABB_Iterador iterador() {
-        return new ABB_Iterador();
+        ABB_Iterador itera = new ABB_Iterador();
+        itera._actual = this.minimoNodo();
+        return itera;
     }
-
 }
