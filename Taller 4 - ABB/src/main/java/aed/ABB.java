@@ -38,6 +38,18 @@ public class ABB<T extends Comparable<T>> {
             }
             return buscador.datos;
         }
+
+        private T maximoNodo(){
+            Nodo buscador = this;
+            while (buscador.derecha != null){
+                buscador = buscador.derecha;
+            }
+            return buscador.datos;
+        }
+
+        private boolean EsMenor(T elem){
+            return (this.datos.compareTo(elem) > 0);
+        }
     }
 
     public ABB() {
@@ -50,19 +62,11 @@ public class ABB<T extends Comparable<T>> {
     }
 
     public T minimo(){
-        Nodo nodoActual = this.root;
-        while (nodoActual.izquierda != null) {
-            nodoActual = nodoActual.izquierda;
-        }
-        return nodoActual.datos;
+        return this.root.minimoNodo();
     }
 
     public T maximo(){
-        Nodo nodoActual = this.root;
-        while (nodoActual.derecha != null) {
-            nodoActual = nodoActual.derecha;
-        }
-        return nodoActual.datos;
+        return this.root.maximoNodo();
     }
 
     public void insertar(T elem){
@@ -71,9 +75,14 @@ public class ABB<T extends Comparable<T>> {
             this.tamano = this.tamano+1;
         }
         else {
-            Nodo nodoActual = this.root;
-            while (nodoActual.datos != elem) {
-                if (nodoActual.datos.compareTo(elem) > 0) {
+            this.BuscarMeter(elem);
+        }
+    }
+
+    private void BuscarMeter(T elem){
+        Nodo nodoActual = this.root;
+        while (nodoActual.datos != elem) {
+                if (nodoActual.EsMenor(elem)) {
                     if (nodoActual.izquierda == null) {
                         nodoActual.izquierda = new Nodo(elem);
                         nodoActual.izquierda.Padre = nodoActual;
@@ -90,13 +99,12 @@ public class ABB<T extends Comparable<T>> {
                     nodoActual = nodoActual.derecha;
                 }
             }
-        }
     }
 
     private Nodo pertenece_Nodo(T elem){
         Nodo nodoActual = this.root;
         while ((nodoActual != null) && (nodoActual.datos != elem)) {
-            if (nodoActual.datos.compareTo(elem) > 0) {
+            if (nodoActual.EsMenor(elem)) {
                 nodoActual = nodoActual.izquierda;
             }
             else {
@@ -121,55 +129,23 @@ public class ABB<T extends Comparable<T>> {
             return;
         }
         int Caso = nodoABorrar.Cantidad_de_hijos();
-        boolean fatherless = (this.root.datos == nodoABorrar.datos);
-        boolean hijoIzquierdo = false;
-        if (!fatherless){
-            hijoIzquierdo = (nodoABorrar.Padre.datos.compareTo(nodoABorrar.datos) > 0);
-        }
         if (Caso == 0){
             this.tamano = this.tamano-1;
-            if (!fatherless){
-                if (hijoIzquierdo){
+            if (this.root.datos != nodoABorrar.datos){
+                if (nodoABorrar.Padre.EsMenor(nodoABorrar.datos)){
                     nodoABorrar.Padre.izquierda = null;
                 }
                 else{
                     nodoABorrar.Padre.derecha = null;
                 }
             }
-            nodoABorrar.datos = null;
+            else{
+                this.root.datos = null;
+            }
         }
         if (Caso == 1){
             this.tamano = this.tamano-1;
-            if (nodoABorrar.izquierda != null){
-                if (!fatherless){
-                    nodoABorrar.izquierda.Padre = nodoABorrar.Padre;
-                    if (hijoIzquierdo){
-                        nodoABorrar.Padre.izquierda = nodoABorrar.izquierda;
-                    }
-                    else{
-                        nodoABorrar.Padre.derecha = nodoABorrar.izquierda;
-                    }
-                }
-                else{
-                    nodoABorrar.izquierda.Padre = null;
-                    this.root = nodoABorrar.izquierda;
-                }
-            }
-            else{
-                if (!fatherless){
-                    nodoABorrar.derecha.Padre = nodoABorrar.Padre;
-                    if (hijoIzquierdo){
-                        nodoABorrar.Padre.izquierda = nodoABorrar.derecha;
-                    }
-                    else{
-                        nodoABorrar.Padre.derecha = nodoABorrar.derecha;
-                    }
-                }
-                else{
-                    nodoABorrar.derecha.Padre = null;
-                    this.root = nodoABorrar.derecha;
-                }
-            }
+            Caso1(nodoABorrar);
         }
         if (Caso == 2){
             T sucesor = nodoABorrar.derecha.minimoNodo();
@@ -178,6 +154,23 @@ public class ABB<T extends Comparable<T>> {
         }
         
     }
+
+    private void Caso1(Nodo nodoABorrar){
+            if (nodoABorrar.izquierda != null){
+                nodoABorrar.datos = nodoABorrar.izquierda.datos;
+                if (nodoABorrar.izquierda.derecha != null){
+                    nodoABorrar.derecha = nodoABorrar.izquierda.derecha;
+                }
+                nodoABorrar.izquierda = nodoABorrar.izquierda.izquierda;
+            }
+            else{
+                nodoABorrar.datos = nodoABorrar.derecha.datos;
+                if (nodoABorrar.derecha.izquierda != null){
+                    nodoABorrar.izquierda = nodoABorrar.derecha.izquierda;
+                }
+                nodoABorrar.derecha = nodoABorrar.derecha.derecha;
+            }
+        }
 
     public String toString(){
         throw new UnsupportedOperationException("No implementada aun");
