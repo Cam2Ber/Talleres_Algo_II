@@ -31,12 +31,16 @@ public class ABB<T extends Comparable<T>> {
             return res;
         }
 
-        private T minimoNodo(){
+        private Nodo NodoConMenorValor(){
             Nodo buscador = this;
             while (buscador.izquierda != null){
                 buscador = buscador.izquierda;
             }
-            return buscador.datos;
+            return buscador;
+        }
+
+        private T minimoNodo(){
+            return this.NodoConMenorValor().datos;
         }
 
         private T maximoNodo(){
@@ -179,12 +183,33 @@ public class ABB<T extends Comparable<T>> {
     public class ABB_Iterador {
         private Nodo _actual;
 
-        public boolean haySiguiente() {            
-            throw new UnsupportedOperationException("No implementada aun");
+        private ABB_Iterador(){
+            _actual = root.NodoConMenorValor();
+        }
+
+        public boolean haySiguiente() {
+            return (this._actual != null);
         }
     
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            T res = this._actual.datos;
+            if (this._actual.derecha != null){
+                this._actual = this._actual.derecha.NodoConMenorValor();
+            }
+            else{
+                Nodo Buscador = this._actual.Padre;
+                boolean Encontrado = false;
+                while ((!Encontrado) && (Buscador != null)){
+                    if (Buscador.EsMenor(this._actual.datos)){
+                        Encontrado = true;
+                    }
+                    else{
+                        Buscador = Buscador.Padre;
+                    }
+                }
+                this._actual = Buscador;
+            }
+            return res;
         }
     }
 
