@@ -2,6 +2,7 @@ package aed;
 
 public class ABB<T extends Comparable<T>> {
     private Nodo root;
+    private int tamano;
 
     private class Nodo {
         T valor;
@@ -59,6 +60,7 @@ public class ABB<T extends Comparable<T>> {
         private void BorradorNodal(){
             int caso = this.Cantidad_de_hijos();
             if (caso == 0){
+                tamano = tamano-1;
                 if (this.A != null){
                     if (this.A.valor.compareTo(this.valor) > 0){
                         this.A.I = null;
@@ -71,6 +73,7 @@ public class ABB<T extends Comparable<T>> {
                 this.valor = null;
             }
             if (caso == 1){
+                tamano = tamano-1;
                 Nodo Hijo = this;
                 if (this.I != null){
                     Hijo = this.I;
@@ -111,7 +114,7 @@ public class ABB<T extends Comparable<T>> {
             return this.nodoReferenciado.valor;
         }
 
-        public void Borrar(){
+        public void eliminar(){
             this.nodoReferenciado.BorradorNodal();
         }
     }
@@ -120,8 +123,20 @@ public class ABB<T extends Comparable<T>> {
         this.root = null;
     }
 
+    public int cardinal(){
+        return this.tamano;
+    }
+
     public T minimo(){
         return this.root.minimoNodal().valor;
+    }
+
+    public T maximo(){
+        Nodo Buscador = this.root;
+        while (Buscador.D != null){
+            Buscador = Buscador.D;
+        }
+        return Buscador.valor;
     }
 
     public HandleABB insertar(T elem){
@@ -129,6 +144,7 @@ public class ABB<T extends Comparable<T>> {
         if ((this.root == null) || (this.root.valor == null)){
             Buscador = new Nodo(elem);
             this.root = Buscador;
+            this.tamano = 1;
         }
         else{
             Buscador = Buscador.BuscadorNodal(elem);
@@ -142,6 +158,7 @@ public class ABB<T extends Comparable<T>> {
                     Buscador.D = insertado;
                 }
                 Buscador = insertado;
+                this.tamano = this.tamano+1;
             }
         }
         HandleABB Palanca = new HandleABB(Buscador);
