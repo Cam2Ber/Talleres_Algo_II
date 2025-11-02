@@ -111,8 +111,9 @@ public class ListaEnlazada<T> {
             res = res+iter.siguiente().toString();
         }
         while (iter.haySiguiente()){
-            res = res+","+iter.siguiente().toString();
+            res = res+", "+iter.siguiente().toString();
         }
+        res = res+"]";
         return res;
     }
 
@@ -122,11 +123,11 @@ public class ListaEnlazada<T> {
 
         private ListaIterador(Nodo Actual){
             this.NodoActual = Actual;
-            this.EstoySobreNull = false;
+            this.EstoySobreNull = ((Actual == null) || (Actual.valor == null));
         }
 
         public boolean haySiguiente() {
-	        return this.EstoySobreNull;
+	        return (!this.EstoySobreNull);
         }
         
         public boolean hayAnterior() {
@@ -135,7 +136,7 @@ public class ListaEnlazada<T> {
 
         public T siguiente() {
 	        T valor = this.NodoActual.valor;
-            if (this.haySiguiente()){
+            if (this.NodoActual.Next != null){
                 this.NodoActual = this.NodoActual.Next;
             }
             else{

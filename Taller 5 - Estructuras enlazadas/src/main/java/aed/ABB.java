@@ -58,9 +58,9 @@ public class ABB<T extends Comparable<T>> {
         }
 
         private void BorradorNodal(){
+            tamano = tamano-1;
             int caso = this.Cantidad_de_hijos();
             if (caso == 0){
-                tamano = tamano-1;
                 if (this.A != null){
                     if (this.A.valor.compareTo(this.valor) > 0){
                         this.A.I = null;
@@ -73,7 +73,6 @@ public class ABB<T extends Comparable<T>> {
                 this.valor = null;
             }
             if (caso == 1){
-                tamano = tamano-1;
                 Nodo Hijo = this;
                 if (this.I != null){
                     Hijo = this.I;
@@ -97,8 +96,27 @@ public class ABB<T extends Comparable<T>> {
             }
             if (caso == 2){
                 Nodo minimo = this.D.minimoNodal();
-                this.valor = minimo.valor;
-                minimo.BorradorNodal();
+                if (this.D.valor.compareTo(minimo.valor) != 0){
+                    minimo.A.I = minimo.D;
+                }
+                else{
+                    minimo.A.D = minimo.D;
+                }
+                minimo.D = this.D;
+                minimo.I = this.I;
+                minimo.I.A = minimo;
+                minimo.A = this.A;
+                if (this.A != null){
+                    if (this.A.valor.compareTo(this.valor) > 0){
+                        this.A.I = minimo;
+                    }
+                    else{
+                        this.A.D = minimo;
+                    }
+                }
+                else{
+                    root = minimo;
+                }
             }
         }
     }
@@ -116,6 +134,11 @@ public class ABB<T extends Comparable<T>> {
 
         public void eliminar(){
             this.nodoReferenciado.BorradorNodal();
+        }
+
+        @Override
+        public String toString(){
+            return this.nodoReferenciado.valor.toString();
         }
     }
 
@@ -186,7 +209,7 @@ public class ABB<T extends Comparable<T>> {
             texto = texto+iterador.siguiente();
         }
         while (iterador.haySiguiente()){
-            texto = texto+","+iterador.siguiente();
+            texto = texto+", "+iterador.siguiente();
         }
         texto = texto+"}";
         return texto;
@@ -205,7 +228,7 @@ public class ABB<T extends Comparable<T>> {
         }
 
         public boolean haySiguiente() {
-            return (this._actual != null);
+            return ((this._actual != null) && (this._actual.valor != null));
         }
     
         public T siguiente() {
