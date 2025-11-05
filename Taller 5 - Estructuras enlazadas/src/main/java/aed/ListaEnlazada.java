@@ -34,8 +34,8 @@ public class ListaEnlazada<T> {
         return res;
     }
 
-    private void agregar_BIdireccional(T elem, boolean adelante){ //La primera función del mes del orgullo, en algun lado
-        Nodo ParaAgregar = new Nodo(elem);
+    private void agregar_BIdireccional(T elem, boolean adelante){ //La primera función del mes del orgullo, en algun lado, A partir de la coma paso una semana, matate.
+        Nodo ParaAgregar = new Nodo(elem); //O(1)
         boolean Vacio = agregarPrimero(ParaAgregar);
         if (!Vacio){
             this.longitud = this.longitud+1;
@@ -45,7 +45,7 @@ public class ListaEnlazada<T> {
                 this.primero = ParaAgregar;
             }
             else{
-                ParaAgregar.Back = this.ultimo;
+                ParaAgregar.Back = this.ultimo; //Como me guardo una referencia al ultimo, esto es O(1)
                 this.ultimo.Next = ParaAgregar;
                 this.ultimo = ParaAgregar;
             }

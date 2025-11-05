@@ -14,7 +14,7 @@ public class ABB<T extends Comparable<T>> {
             this.valor = elem;
         }
 
-        private Nodo BuscadorNodal(T elem){
+        private Nodo BuscadorNodal(T elem){ //Caso Promedio: O(log(n))
             Nodo Buscador = this;
             boolean noEsta = false;
             while ((!noEsta) && (Buscador.valor.compareTo(elem) != 0)){
@@ -164,15 +164,15 @@ public class ABB<T extends Comparable<T>> {
 
     public HandleABB insertar(T elem){
         Nodo Buscador = this.root;
-        if ((this.root == null) || (this.root.valor == null)){
+        if ((this.root == null) || (this.root.valor == null)){ //Esta ruta tomaría O(1)?
             Buscador = new Nodo(elem);
             this.root = Buscador;
             this.tamano = 1;
         }
         else{
-            Buscador = Buscador.BuscadorNodal(elem);
+            Buscador = Buscador.BuscadorNodal(elem); //O(log(n))
             if (Buscador.valor.compareTo(elem) != 0){
-                Nodo insertado = new Nodo(elem);
+                Nodo insertado = new Nodo(elem); //O(1)
                 insertado.A = Buscador;
                 if (Buscador.valor.compareTo(elem) > 0){
                     Buscador.I = insertado;
@@ -202,11 +202,11 @@ public class ABB<T extends Comparable<T>> {
     }
 
     @Override
-    public String toString(){
+    public String toString(){ //O(nlog(n)) por definición armar el iterador toma log(n), despues no se como hacer que buscar el siguiente tome tiempo constante, y para cumplir lo pedido tiene que tomar tiempo constante ya que se tiene que repetir n veces para poder conseguir todos los valores del arbol 
         String texto = "{";
-        ABB_Iterador iterador = this.iterador();
+        ABB_Iterador iterador = this.iterador(); //O(log(n))
         if (iterador.haySiguiente()){
-            texto = texto+iterador.siguiente();
+            texto = texto+iterador.siguiente(); //O(log(n)), pero se repite n veces
         }
         while (iterador.haySiguiente()){
             texto = texto+", "+iterador.siguiente();
@@ -220,10 +220,10 @@ public class ABB<T extends Comparable<T>> {
 
         private ABB_Iterador(){
             if (root == null){
-                _actual = null;
+                _actual = null; //O(1)
             }
             else{
-                _actual = root.minimoNodal();
+                _actual = root.minimoNodal(); //O(log(n))
             }
         }
 
@@ -234,14 +234,14 @@ public class ABB<T extends Comparable<T>> {
         public T siguiente() {
             T res = this._actual.valor;
             if (this._actual.D != null){
-                this._actual = this._actual.D.minimoNodal();
+                this._actual = this._actual.D.minimoNodal(); //Pensandolo en seco, esto se siente mejor que un log(n), ya que aun si lo estas haciendo desde el root, seguis dividiendo al ir por la derecha antes de hacer log (lo que sería log(n/2)), pero creo que asintoticamente sigue siendo log(n), así que lo voy a calcular así
             }
             else{
                 Nodo Buscador = this._actual.A;
                 boolean Encontrado = false;
-                while ((!Encontrado) && (Buscador != null)){
+                while ((!Encontrado) && (Buscador != null)){ //La peor situación en un caso promedio (ie. asumimos que el arbol esta balanceado) es si estas en el maximo, que tenes que recorrer devuelta hasta el root+1, que emocionalmente se siente mejor que log(n) (asumiendo que el arbol esta balanceado), pero creo que asintoticamente sigue siendo log(n)
                     if (Buscador.valor.compareTo(this._actual.valor) > 0){
-                        Encontrado = true;
+                        Encontrado = true; //El primer padre que es mayor que el nodo actual va a ser necesariamente el que esta mas cerca por encima al nodo actual, ya que, si asumimos que existe un nodo mayor más cercano al nodo actual, el mismo tendría que estar en ruta directa hacía arriba del nodo actual, ya que si asumimos lo contrario, eso significaría que es menor que un nodo menor al nodo actual (rompiendo la hipotesis de mayor), o mayor a un nodo que es mayor al nodo actual (rompiendo la hipotesis de cercanía), por lo que todo nodo "siguiente" tiene que estar a la derecha del nodo actual, o por arriba de manera directa, en caso de que no haya nodo derecho.
                     }
                     else{
                         Buscador = Buscador.A;
