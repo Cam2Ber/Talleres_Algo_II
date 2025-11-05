@@ -60,7 +60,7 @@ public class ABB<T extends Comparable<T>> {
         private void BorradorNodal(){
             tamano = tamano-1;
             int caso = this.Cantidad_de_hijos();
-            if (caso == 0){
+            if (caso == 0){ //O(1), muchas comparaciones y asignaciones
                 if (this.A != null){
                     if (this.A.valor.compareTo(this.valor) > 0){
                         this.A.I = null;
@@ -72,13 +72,10 @@ public class ABB<T extends Comparable<T>> {
                 }
                 this.valor = null;
             }
-            if (caso == 1){
-                Nodo Hijo = this;
+            if (caso == 1){ //O(1), muchas comparaciones y asignaciones
+                Nodo Hijo = this.D;
                 if (this.I != null){
                     Hijo = this.I;
-                }
-                else{
-                    Hijo = this.D;
                 }
                 if (this.A != null){
                     Hijo.A = this.A;
@@ -94,8 +91,8 @@ public class ABB<T extends Comparable<T>> {
                     Hijo.A = null;
                 }
             }
-            if (caso == 2){
-                Nodo minimo = this.D.minimoNodal();
+            if (caso == 2){ //log(n)
+                Nodo minimo = this.D.minimoNodal(); //log(n)
                 if (this.D.valor.compareTo(minimo.valor) != 0){
                     minimo.A.I = minimo.D;
                 }
@@ -133,24 +130,24 @@ public class ABB<T extends Comparable<T>> {
         }
 
         public void eliminar(){
-            this.nodoReferenciado.BorradorNodal();
+            this.nodoReferenciado.BorradorNodal(); //O(log(n)) en el peor de los casos(Se borra uno con dos hijos), en el mejor de los casos es O(1)
         }
 
         @Override
         public String toString(){
-            return this.nodoReferenciado.valor.toString();
+            return this.nodoReferenciado.valor.toString(); //Tuve que hacerlo así porque si no, no imprimía bien el valor, ni idea la complejidad, asumo que lo vamos a interpretar como O(1)
         }
     }
 
-    public ABB() {
+    public ABB() { //O(1)
         this.root = null;
     }
 
-    public int cardinal(){
+    public int cardinal(){ //O(1)
         return this.tamano;
     }
 
-    public T minimo(){
+    public T minimo(){ //O(log(n))
         return this.root.minimoNodal().valor;
     }
 
@@ -162,14 +159,14 @@ public class ABB<T extends Comparable<T>> {
         return Buscador.valor;
     }
 
-    public HandleABB insertar(T elem){
+    public HandleABB insertar(T elem){ //Obj;O(log(n)) res:O(log(n))
         Nodo Buscador = this.root;
         if ((this.root == null) || (this.root.valor == null)){ //Esta ruta tomaría O(1)?
             Buscador = new Nodo(elem);
             this.root = Buscador;
             this.tamano = 1;
         }
-        else{
+        else{ //O(log(n))
             Buscador = Buscador.BuscadorNodal(elem); //O(log(n))
             if (Buscador.valor.compareTo(elem) != 0){
                 Nodo insertado = new Nodo(elem); //O(1)
@@ -188,16 +185,16 @@ public class ABB<T extends Comparable<T>> {
         return Palanca;
     }
 
-    public boolean pertenece(T elem){
+    public boolean pertenece(T elem){ //Obj:O(log(n)), res:O(log(n))
         Nodo Buscador = this.root.BuscadorNodal(elem);
         boolean res = (Buscador.valor.compareTo(elem) == 0);
         return res;
     }
 
-    public void eliminar(T elem){
-        Nodo Buscador = this.root.BuscadorNodal(elem);
+    public void eliminar(T elem){ //Obj:O(log(n)), res:O(log(n))+O(log(n))=O(log(n))
+        Nodo Buscador = this.root.BuscadorNodal(elem); //O(log(n))
         if (Buscador.valor.compareTo(elem) == 0){
-            Buscador.BorradorNodal();
+            Buscador.BorradorNodal(); //O(log(n))
         }
     }
 

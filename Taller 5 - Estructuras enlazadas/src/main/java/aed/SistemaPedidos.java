@@ -9,28 +9,28 @@ public class SistemaPedidos {
         this.Arbol_Pedidos = new ABB<Pedido>();
     }
 
-    public void agregarPedido(Pedido pedido){
+    public void agregarPedido(Pedido pedido){ //O(log(n))
         ABB<Pedido>.HandleABB Manija = this.Arbol_Pedidos.insertar(pedido);
         this.Lista_Pedidos.agregarAtras(Manija);
     }
 
-    public Pedido proximoPedido(){
-        ABB<Pedido>.HandleABB manija = Lista_Pedidos.obtener(0);
-        Pedido res = manija.valor();
-        Lista_Pedidos.eliminar(0);
-        manija.eliminar();
+    public Pedido proximoPedido(){ //O(log(n))
+        ABB<Pedido>.HandleABB manija = Lista_Pedidos.obtener(0); //O(1), ya que estamos accediendo siempre al mismo elemento, el primero de todos, que se puede acceder en O(1)
+        Pedido res = manija.valor(); //O(1)
+        Lista_Pedidos.eliminar(0); //O(1), ya que estamos accediendo siempre al mismo elemento, el primero de todos, que se puede acceder en O(1)
+        manija.eliminar(); //O(log(n))
         return res;
     }
 
-    public Pedido pedidoMenorId(){
+    public Pedido pedidoMenorId(){ //O(log(n))
         return this.Arbol_Pedidos.minimo();
     }
 
-    public String obtenerPedidosEnOrdenDeLlegada(){
+    public String obtenerPedidosEnOrdenDeLlegada(){ //O(n)
         return this.Lista_Pedidos.toString();
     }
 
-    public String obtenerPedidosOrdenadosPorId(){
+    public String obtenerPedidosOrdenadosPorId(){ //O(n*log(n))
         return this.Arbol_Pedidos.toString();
     }
 }
